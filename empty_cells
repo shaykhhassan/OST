@@ -23,6 +23,7 @@ NR == 1 {
     next
 }
 {
+    gsub(/\r/, "")
     for (i = 1; i <= max_fields; i++) {
         if (i > NF || $i == "") {
             empty[i]++
