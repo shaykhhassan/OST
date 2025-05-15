@@ -9,17 +9,29 @@ fi
 file="$1"
 sep="$2"
 
-# Loop through each line of the input file
-while IFS="$sep" read -r line; do
-    # Split line into fields
-    fields=($line)
-    # Loop through each field to count empty cells
-    for field in "${fields[@]}"; do
-        if [ -z "$field" ]; then
-            empty_cells=$((empty_cells + 1))
-        fi
-    done
-done < "$file"
-
-# Output the count of empty cells
-echo "Number of empty cells: $empty_cells"
+awk -v sep="$sep" '
+BEGIN {
+    FS = sep
+}
+NR == 1 {
+    for (i = 1; i <= NF; i++) {
+        gsub(/\r/, "", $i)
+        header[i] = $i
+        empty[i] = 0
+    }
+    max_fields = NF
+    next
+}
+{
+    for (i = 1; i <= max_fields; i++) {
+        if (i > NF || $i == "") {
+            empty[i]++
+        }
+    }
+}
+END {
+    for (i = 1; i <= max_fields; i++) {
+        print header[i] ": " empty[i]
+    }
+}
+' "$file"
