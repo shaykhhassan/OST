@@ -1,1 +1,44 @@
+#!/bin/bash
+
+# Check correct usage
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 <input_file>" >&2
+    exit 1
+fi
+
+input="$1"
+
+# Extract the highest ID number (assuming IDs are in the first column and are integers)
+max_id=$(awk -F';' 'NR > 1 && $1 ~ /^[0-9]+$/ && $1 > max { max = $1 } END { print max+0 }' "$input")
+next_id=$((max_id + 1))
+
+awk -v OFS='\t' -v next_id="$next_id" '
+BEGIN {
+    FS = ";"
+}
+NR == 1 {
+    # Print header after cleaning non-ASCII and \r
+    for (i = 1; i <= NF; i++) {
+        gsub(/\r/, "", $i)
+        gsub(/[^\x00-\x7F]/, "", $i)
+    }
+    print $0
+    next
+}
+{
+    # Clean line endings and non-ASCII chars
+    for (i = 1; i <= NF; i++) {
+        gsub(/\r/, "", $i)
+        gsub(/[^\x00-\x7F]/, "", $i)
+        gsub(/,/, ".", $i)  # Fix decimal commas
+    }
+
+    # If ID (first field) is empty, generate new one
+    if ($1 == "") {
+        $1 = next_id++
+    }
+
+    print $0
+}
+' "$input"
 
