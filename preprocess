@@ -8,7 +8,7 @@ fi
 
 input="$1"
 
-# Extract the highest ID number (assuming IDs are in the first column and are integers)
+# Find the largest existing integer ID in column 1
 max_id=$(awk -F';' 'NR > 1 && $1 ~ /^[0-9]+$/ && $1 > max { max = $1 } END { print max+0 }' "$input")
 next_id=$((max_id + 1))
 
@@ -17,7 +17,7 @@ BEGIN {
     FS = ";"
 }
 NR == 1 {
-    # Print header after cleaning non-ASCII and \r
+    # Clean and print header
     for (i = 1; i <= NF; i++) {
         gsub(/\r/, "", $i)
         gsub(/[^\x00-\x7F]/, "", $i)
@@ -26,19 +26,22 @@ NR == 1 {
     next
 }
 {
-    # Clean line endings and non-ASCII chars
+    # Clean and fill data row
     for (i = 1; i <= NF; i++) {
         gsub(/\r/, "", $i)
         gsub(/[^\x00-\x7F]/, "", $i)
-        gsub(/,/, ".", $i)  # Fix decimal commas
+        gsub(/,/, ".", $i)
+
+        if ($i == "") {
+            $i = 0
+        }
     }
 
-    # If ID (first field) is empty, generate new one
-    if ($1 == "") {
+    # Replace missing ID in first field if needed
+    if ($1 == 0) {
         $1 = next_id++
     }
 
     print $0
 }
 ' "$input"
-
