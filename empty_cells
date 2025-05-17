@@ -4,7 +4,7 @@
 # character, returns via standard output a list of the column titles 
 # (taken from the first line) and the number of empty cells found in that column.
 
-# Check correct usage
+# Correct Usage check
 if [ "$#" -ne 2 ]; then
     echo "Usage: $0 <input_file> <separator>" >&2
     exit 1

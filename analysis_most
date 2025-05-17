@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# Check usage
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 <cleaned_tsv_file>" >&2
+    exit 1
+fi
+
+file="$1"
+
+awk -F'\t' '
+NR > 1 {
+    if ($5 != "") mechanic[$5]++
+    if ($6 != "") domain[$6]++
+}
+END {
+    max_mech = ""; max_mech_count = 0
+    for (m in mechanic) {
+        if (mechanic[m] > max_mech_count) {
+            max_mech = m
+            max_mech_count = mechanic[m]
+        }
+    }
+    print "The most popular game mechanic is " max_mech " found in " max_mech_count " games"
+
+    max_domain = ""; max_domain_count = 0
+    for (d in domain) {
+        if (domain[d] > max_domain_count) {
+            max_domain = d
+            max_domain_count = domain[d]
+        }
+    }
+    print "The most game domain is " max_domain " found in " max_domain_count " games"
+}
+' "$file"

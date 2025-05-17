@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Check usage
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 <cleaned_tsv_file>" >&2
+    exit 1
+fi
+
+file="$1"
