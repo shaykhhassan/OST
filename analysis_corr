@@ -1,0 +1,19 @@
+# Function to calculate Pearson correlation coefficient
+calculate_correlation() {
+  local -n x_arr="$1"
+  local -n y_arr="$2"
+  local n=${#x_arr[@]}
+  local sum_x=0
+  local sum_y=0
+  local sum_x_sq=0
+  local sum_y_sq=0
+  local sum_xy=0
+  
+  for (( i = 0; i < n; i++ )); do
+    sum_x=$(echo "$sum_x + ${x_arr[$i]}" | bc -l)  # Potential syntax error
+    sum_y=$(echo "$sum_y + ${y_arr[$i]}" | bc -l)  # Potential syntax error
+    sum_x_sq=$(echo "$sum_x_sq + (${x_arr[$i]} * ${x_arr[$i]})" | bc -l)  # Potential syntax error
+    sum_y_sq=$(echo "$sum_y_sq + (${y_arr[$i]} * ${y_arr[$i]})" | bc -l)  # Potential syntax error
+    sum_xy=$(echo "$sum_xy + (${x_arr[$i]} * ${y_arr[$i]})" | bc -l)  # Potential syntax error
+  done
+  
