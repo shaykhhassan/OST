@@ -8,7 +8,7 @@
 #   decimal point.
 # - Deal with non-ASCII characters by deleting them from the output. 
 # - For ID column searching the column for largest number, and then continue 
-#   numbering past that.
+#   numbering past that if any field is empty, has 0 or invalid integer character.
 # - Other empty cells are being replaced with 0
 
 # Correct Usage check
