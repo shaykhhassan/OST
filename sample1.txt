@@ -2,6 +2,6 @@
 8355;Drive to the Baltic!;2000;1;2;180;12;39;7,42;10776;3,08;190;Chit-Pull System, Hexagon Grid;Wargames
 213491;The Legend of the Wendigo;2017;2;6;10;6;177;6,00;10777;1;383;Cooperative Game, Memory;
 ;Ace of Aces: Jet Eagles;1990;2;2;20;10;110;6,26;10778;2;10;18;Bodgy
-4276;Across the Potomac;1994;2;2;120;12;97;6,28;10779;;;Dice Rolling, Grid Movement, Hexagon Grid, Simulation;Wargames
-138973;Camelot: The Build;2013;1;5;45;10;167;6,19;10780;;;Tile Placement;
+427s6;Across the Potomac;1994;2;2;120;12;97;6,28;10779;;;Dice Rolling, Grid Movement, Hexagon Grid, Simulation;Wargames
+138s973;Camelot: The Build;2013;1;5;45;10;167;6,19;10780;;;Tile Placement;
 138973;Camelot: The Build;2013;1;5;45;10;167;6,19;10780;;;Tile Placement;

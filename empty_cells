@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# This script given a text file version of a spreadsheet and the expected separator 
+# character, returns via standard output a list of the column titles 
+# (taken from the first line) and the number of empty cells found in that column.
+
 # Check correct usage
 if [ "$#" -ne 2 ]; then
     echo "Usage: $0 <input_file> <separator>" >&2
@@ -11,29 +15,35 @@ sep="$2"
 
 awk -v sep="$sep" '
 BEGIN {
-    FS = sep
+    FS = sep  # Set the input field separator based on the provided argument
 }
+
+# Handle the header row (first line)
 NR == 1 {
     for (i = 1; i <= NF; i++) {
-        gsub(/\r/, "", $i)
-        header[i] = $i
-        empty[i] = 0
+        gsub(/\r/, "", $i)     # Remove any carriage return characters
+        header[i] = $i         # Store header names for later reporting
+        empty[i] = 0           # Initialize empty count for each column
     }
-    max_fields = NF
-    next
+    max_fields = NF           # Save the number of columns
+    next                      # Move to the next row
 }
+
+# For each data row, count empty or missing fields
 {
-    gsub(/\r/, "")
+    gsub(/\r/, "")  # Clean carriage return characters in current row
+
     for (i = 1; i <= max_fields; i++) {
         if (i > NF || $i == "") {
-            empty[i]++
+            empty[i]++         # Increment count if cell is empty or missing
         }
     }
 }
+
+# At the end, print the count of empty cells per column
 END {
     for (i = 1; i <= max_fields; i++) {
-        print header[i] ": " empty[i]
+        print header[i] ": " empty[i]  # Format: ColumnName: count
     }
 }
 ' "$file"
-

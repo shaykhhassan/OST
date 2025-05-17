@@ -1,4 +1,16 @@
 #!/bin/bash
+
+# This script given a text file sends to standard output a cleaned version of the 
+# input file, where the following transformations have taken place:
+# - Convert the semicolon separator to the  <tab> character
+# - Convert the Microsoft line endings to Unix line endings
+# - Change format of floating-point numbers to use ‘.’ rather than ‘,’ as the 
+#   decimal point.
+# - Deal with non-ASCII characters by deleting them from the output. 
+# - For ID column searching the column for largest number, and then continue 
+#   numbering past that.
+# - Other empty cells are being replaced with 0
+
 # Correct Usage check
 if [ "$#" -ne 1 ]; then
     echo "Usage: $0 <input_file>" >&2
@@ -21,7 +33,6 @@ BEGIN {
         gsub(/\r/, "", $i)              # Removing carriage returns
         gsub(/[^\x00-\x7F]/, "", $i)    # Removing non-ASCII characters
         gsub(/,/, ".", $i)              # Changing comma to dot for decimal
-
         if (NR > 1 && $i == "") {
             $i = 0                     # Filling empty fields with 0
         }
@@ -37,8 +48,8 @@ BEGIN {
         next
     }
 
-    # Assign new ID if amy row in ID is empty or 0
-    if ($1 == 0 || $1 == "") {
+    # Assign new ID if any row in ID is empty, 0 or not a integer
+    if ($1 == "" || $1 == 0 || $1 !~ /^[0-9]+$/) {
         $1 = next_id++
     }
 
