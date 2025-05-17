@@ -1,14 +1,14 @@
 #!/bin/bash
 
-# Check correct usage
 if [ "$#" -ne 1 ]; then
     echo "Usage: $0 <input_file>" >&2
     exit 1
 fi
 
 input="$1"
+base="${input%.*}"
+output="${base}.tsv"
 
-# Find the largest existing integer ID in column 1
 max_id=$(awk -F';' 'NR > 1 && $1 ~ /^[0-9]+$/ && $1 > max { max = $1 } END { print max+0 }' "$input")
 next_id=$((max_id + 1))
 
@@ -16,32 +16,25 @@ awk -v OFS='\t' -v next_id="$next_id" '
 BEGIN {
     FS = ";"
 }
-NR == 1 {
-    # Clean and print header
-    for (i = 1; i <= NF; i++) {
-        gsub(/\r/, "", $i)
-        gsub(/[^\x00-\x7F]/, "", $i)
-    }
-    print $0
-    next
-}
 {
-    # Clean and fill data row
     for (i = 1; i <= NF; i++) {
         gsub(/\r/, "", $i)
         gsub(/[^\x00-\x7F]/, "", $i)
         gsub(/,/, ".", $i)
 
-        if ($i == "") {
+        if (NR > 1 && $i == "") {
             $i = 0
         }
     }
 
-    # Replace missing ID in first field if needed
-    if ($1 == 0) {
+    if (NR > 1 && $1 == 0) {
         $1 = next_id++
     }
 
-    print $0
+    for (i = 1; i <= NF; i++) {
+        printf "%s", $i
+        if (i < NF) printf OFS
+    }
+    printf "\n"
 }
-' "$input"
+' "$input" > "$output"
