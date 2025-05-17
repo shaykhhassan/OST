@@ -16,20 +16,27 @@ awk -v OFS='\t' -v next_id="$next_id" '
 BEGIN {
     FS = ";"
 }
+NR == 1 {
+    print $0
+    next
+}
 {
     for (i = 1; i <= NF; i++) {
         gsub(/\r/, "", $i)
         gsub(/[^\x00-\x7F]/, "", $i)
         gsub(/,/, ".", $i)
-
-        if (NR > 1 && $i == "") {
-            $i = 0
-        }
+        if ($i == "") $i = 0
     }
 
-    if (NR > 1 && $1 == 0) {
+    if ($1 == 0 || $1 == "") {
         $1 = next_id++
     }
+
+    if ($1 in seen) {
+        next
+    }
+
+    seen[$1] = 1  # Mark ID as seen
 
     for (i = 1; i <= NF; i++) {
         printf "%s", $i
