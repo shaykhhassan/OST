@@ -6,8 +6,6 @@ if [ "$#" -ne 1 ]; then
 fi
 
 input="$1"
-base="${input%.*}"
-output="${base}.tsv"
 
 max_id=$(awk -F';' 'NR > 1 && $1 ~ /^[0-9]+$/ && $1 > max { max = $1 } END { print max+0 }' "$input")
 next_id=$((max_id + 1))
@@ -18,12 +16,11 @@ BEGIN {
 }
 {
     for (i = 1; i <= NF; i++) {
-        gsub(/\r/, "", $i)            
-        gsub(/[^\x00-\x7F]/, "", $i) 
-        gsub(/,/, ".", $i)   
-
+        gsub(/\r/, "", $i) 
+        gsub(/[^\x00-\x7F]/, "", $i)
+        gsub(/,/, ".", $i) 
         if (NR > 1 && $i == "") {
-            $i = 0     
+            $i = 0  
         }
     }
 
@@ -52,4 +49,4 @@ BEGIN {
     }
     printf "\n"
 }
-' "$input" > "$output"
+' "$input"
