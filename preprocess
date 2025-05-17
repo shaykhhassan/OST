@@ -16,16 +16,24 @@ awk -v OFS='\t' -v next_id="$next_id" '
 BEGIN {
     FS = ";"
 }
-NR == 1 {
-    print $0
-    next
-}
 {
     for (i = 1; i <= NF; i++) {
-        gsub(/\r/, "", $i)
-        gsub(/[^\x00-\x7F]/, "", $i)
-        gsub(/,/, ".", $i)
-        if ($i == "") $i = 0
+        gsub(/\r/, "", $i)            
+        gsub(/[^\x00-\x7F]/, "", $i) 
+        gsub(/,/, ".", $i)   
+
+        if (NR > 1 && $i == "") {
+            $i = 0     
+        }
+    }
+
+    if (NR == 1) {
+        for (i = 1; i <= NF; i++) {
+            printf "%s", $i
+            if (i < NF) printf OFS
+        }
+        printf "\n"
+        next
     }
 
     if ($1 == 0 || $1 == "") {
@@ -36,7 +44,7 @@ NR == 1 {
         next
     }
 
-    seen[$1] = 1  # Mark ID as seen
+    seen[$1] = 1
 
     for (i = 1; i <= NF; i++) {
         printf "%s", $i
