@@ -1,3 +1,10 @@
+# Open Source Tools And Scripting
+## Assignment 2
+#### Submitted By:
+#### Sheikh Muhammad Hassan Ali - 23959698
+
+
+
 # Empty_cell - Counter Script
 
 This script given a text file version of a spreadsheet and the expected separator character, returns via standard output a list of the column titles (taken from the first line) and the number of empty cells found in that column.
@@ -405,3 +412,6 @@ The most popular game domain is Wargames found in 3029 games
 The correlation between the year of publication and the average rating is 0.136
 The correlation between the complexity of a game and its average rating is 0.511
 ```
+
+#### Script Authored By: Sh M Hassan Ali (23959698) UWA MIT
+#### Assignment 2 - Open Source Tools and Scripting
