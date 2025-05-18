@@ -1,5 +1,0 @@
-ID;Name;Rating;Price;Domain\r
-;Chess;4,5;19,99;Strategy Games\r
-2;Monopoly;3,8;25,00;\r
-2;Monopoly;3,8;25,00;\r
-abc;Sørum🎲;,,;\r

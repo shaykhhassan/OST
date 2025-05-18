@@ -26,7 +26,8 @@ NR>1 {
     n = split($mechanics_idx, m_arr, ",")
     for(i=1; i<=n; i++) {
       gsub(/^ +| +$/, "", m_arr[i]) # trim spaces
-      if(m_arr[i] != "") mechanics_count[m_arr[i]]++
+      if(m_arr[i] ~ /[a-zA-Z]/) 
+      mechanics_count[m_arr[i]]++
     }
   }
 
@@ -35,7 +36,8 @@ NR>1 {
     n = split($domains_idx, d_arr, ",")
     for(i=1; i<=n; i++) {
       gsub(/^ +| +$/, "", d_arr[i]) # trim spaces
-      if(d_arr[i] != "") domain_count[d_arr[i]]++
+      if(d_arr[i] ~ /[a-zA-Z]/)
+      domain_count[d_arr[i]]++
     }
   }
 
