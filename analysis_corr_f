@@ -1,0 +1,77 @@
+#!/bin/bash
+
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 <cleaned_tsv_file>" >&2
+    exit 1
+fi
+
+file="$1"
+
+awk -F'\t' '
+BEGIN {
+    # Year Published = column 3
+    # Rating Average = column 9
+    # Complexity Average = column 11
+
+    # For Year vs Rating
+    sum_x1 = sum_y1 = sum_xy1 = sum_x1_2 = sum_y1_2 = 0
+    # For Complexity vs Rating
+    sum_x2 = sum_y2 = sum_xy2 = sum_x2_2 = sum_y2_2 = 0
+
+    n1 = n2 = 0
+}
+
+NR == 1 { next } # Skip header
+
+{
+    year = $3 + 0
+    rating = $9 + 0
+    complexity = $11 + 0
+
+    # Year Published vs Rating Average
+    if (year > 0 && rating > 0) {
+        sum_x1 += year
+        sum_y1 += rating
+        sum_xy1 += year * rating
+        sum_x1_2 += year * year
+        sum_y1_2 += rating * rating
+        n1++
+    }
+
+    # Complexity vs Rating Average
+    if (complexity > 0 && rating > 0) {
+        sum_x2 += complexity
+        sum_y2 += rating
+        sum_xy2 += complexity * rating
+        sum_x2_2 += complexity * complexity
+        sum_y2_2 += rating * rating
+        n2++
+    }
+}
+
+END {
+    # Pearson formula: r = (nΣxy - ΣxΣy) / sqrt[(nΣx² - (Σx)²)(nΣy² - (Σy)²)]
+
+    # Year vs Rating
+    num1 = n1 * sum_xy1 - sum_x1 * sum_y1
+    den1 = sqrt((n1 * sum_x1_2 - sum_x1^2) * (n1 * sum_y1_2 - sum_y1^2))
+
+    if (den1 == 0) {
+        print "Correlation between Year Published and Rating Average is undefined"
+    } else {
+        r1 = num1 / den1
+        printf "Correlation between Year Published and Rating Average: %.3f\n", r1
+    }
+
+    # Complexity vs Rating
+    num2 = n2 * sum_xy2 - sum_x2 * sum_y2
+    den2 = sqrt((n2 * sum_x2_2 - sum_x2^2) * (n2 * sum_y2_2 - sum_y2^2))
+
+    if (den2 == 0) {
+        print "Correlation between Complexity and Rating Average is undefined"
+    } else {
+        r2 = num2 / den2
+        printf "Correlation between Complexity and Rating Average: %.3f\n", r2
+    }
+}
+' "$file"
