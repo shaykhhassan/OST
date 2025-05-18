@@ -1,5 +1,9 @@
 #!/bin/bash
 
+
+# Script Authored By: Sh M Hassan Ali (23959698) UWA MIT
+# Assignment 2 - Open Source Tools and Scripting
+
 # This script given a text file sends to standard output a cleaned version of the 
 # input file, where the following transformations have taken place:
 # - Convert the semicolon separator to the  <tab> character
@@ -85,3 +89,8 @@ BEGIN {
     printf "\n"
 }
 ' "$file"
+
+
+# Script Authored By: Sh M Hassan Ali (23959698) UWA MIT
+# Assignment 2 - Open Source Tools and Scripting
+
