@@ -13,14 +13,31 @@
 
 # Correct Usage check
 if [ "$#" -ne 1 ]; then
-    echo "Usage: $0 <input_file>" >&2
+    echo "Usage: $0 <input_file>.txt" >&2
     exit 1
 fi
 
-input="$1"
+file="$1"
+
+# Check that file exists and is readable
+if [ ! -f "$file" ]; then
+    echo "Error: File '$file' does not exist." >&2
+    exit 1
+fi
+
+if [ ! -r "$file" ]; then
+    echo "Error: File '$file' is not readable." >&2
+    exit 1
+fi
+
+# Check that file ends with .txt
+if [[ "$file" != *.txt ]]; then
+    echo "Error: Input file must have a .txt extension." >&2
+    exit 1
+fi
 
 # Searching the ID column for largest number
-max_id=$(awk -F';' 'NR > 1 && $1 ~ /^[0-9]+$/ && $1 > max { max = $1 } END { print max+0 }' "$input")
+max_id=$(awk -F';' 'NR > 1 && $1 ~ /^[0-9]+$/ && $1 > max { max = $1 } END { print max+0 }' "$file")
 next_id=$((max_id + 1))
 
 awk -v OFS='\t' -v next_id="$next_id" '
@@ -67,4 +84,4 @@ BEGIN {
     }
     printf "\n"
 }
-' "$input"
+' "$file"

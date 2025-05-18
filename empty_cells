@@ -13,6 +13,35 @@ fi
 file="$1"
 sep="$2"
 
+# Check that file exists and is readable
+if [ ! -f "$file" ]; then
+    echo "Error: File '$file' does not exist." >&2
+    exit 1
+fi
+
+if [ ! -r "$file" ]; then
+    echo "Error: File '$file' is not readable." >&2
+    exit 1
+fi
+
+# Check that file ends with .txt
+if [[ "$file" != *.txt ]]; then
+    echo "Error: Input file must have a .txt extension." >&2
+    exit 1
+fi
+
+# Check that separator is a single character
+if [[ ${#sep} -ne 1 ]]; then
+    echo "Error: Separator must be a single character." >&2
+    exit 1
+fi
+
+# Separator Check: must be one semicolon
+if [ "$sep" != ";" ]; then
+    echo "Error: Separator must be a semicolon (;)." >&2
+    exit 1
+fi
+
 awk -v sep="$sep" '
 BEGIN {
     FS = sep  # Set the input field separator based on the provided argument
@@ -22,7 +51,7 @@ BEGIN {
 NR == 1 {
     for (i = 1; i <= NF; i++) {
         gsub(/\r/, "", $i)     # Remove any carriage return characters
-        header[i] = $i         # Store header names for later reporting
+        header[i] = $i         # Store header names for later
         empty[i] = 0           # Initialize empty count for each column
     }
     max_fields = NF           # Save the number of columns

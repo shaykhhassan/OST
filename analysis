@@ -11,7 +11,24 @@ if [ "$#" -ne 1 ]; then
   exit 1
 fi
 
-input="$1"
+file="$1"
+
+# Check that file exists and is readable
+if [ ! -f "$file" ]; then
+    echo "Error: File '$file' does not exist." >&2
+    exit 1
+fi
+
+if [ ! -r "$file" ]; then
+    echo "Error: File '$file' is not readable." >&2
+    exit 1
+fi
+
+# Check that file ends with .tsv
+if [[ "$file" != *.tsv ]]; then
+    echo "Error: Input file must have a .tsv extension." >&2
+    exit 1
+fi
 
 # Use of awk to calculate highest count and correlation for simplicity
 awk -F'\t' '
@@ -123,4 +140,4 @@ END {
   printf "The correlation between the year of publication and the average rating is %.3f\n", corr_year_rating
   printf "The correlation between the complexity of a game and its average rating is %.3f\n", corr_complexity_rating
 }
-' "$input"
+' "$file"
