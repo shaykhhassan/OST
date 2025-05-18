@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# This script uses data from the cleaned input file to answer the four research questions listed below:
+# What is the most popular domain and most popular mechanics across the set of games?
+# What is the correlation between publication year and average rating?
+# What is the correlation between game complexity and average rating?
+
+# Check for correct usage
 if [ "$#" -ne 1 ]; then
   echo "Usage: $0 <cleaned_file.tsv>" >&2
   exit 1
@@ -7,9 +13,10 @@ fi
 
 input="$1"
 
+# Use of awk to calculate highest count and correlation for simplicity
 awk -F'\t' '
 NR==1 {
-  # Identify fields by header names, just in case order changes
+  # Identify fields by header names
   for(i=1; i<=NF; i++) {
     if($i=="Year Published") year_idx=i;
     else if($i=="Rating Average") rating_idx=i;
@@ -76,7 +83,7 @@ END {
   }
 
   print "The most popular game mechanics is " max_mech " found in " max_mech_count " games"
-  print "The most game domain is " max_dom " found in " max_dom_count " games"
+  print "The most popular game domain is " max_dom " found in " max_dom_count " games"
 
   # Calculate Pearson correlations
   sum_x = sum_y = sum_x2 = sum_y2 = sum_xy = 0
