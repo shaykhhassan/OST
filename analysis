@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Script Authored By: Sh M Hassan Ali (23959698) UWA MIT
+# Assignment 2 - Open Source Tools and Scripting
+
 # This script uses data from the cleaned input file to answer the four research questions listed below:
 # What is the most popular domain and most popular mechanics across the set of games?
 # What is the correlation between publication year and average rating?
