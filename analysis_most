@@ -9,11 +9,29 @@ fi
 file="$1"
 
 awk -F'\t' '
-NR == 1 { next }  # Skip header line
-{
-    if ($13 != "") mechanics[$13]++
-    if ($14 != "") domains[$14]++
+NR == 1 { next }  # Skip header
+
+function trim(s) {
+    gsub(/^[ \t]+|[ \t]+$/, "", s)
+    return s
 }
+
+{
+    # Split Mechanics column (13) by comma
+    n = split($13, mechArr, ",")
+    for (i = 1; i <= n; i++) {
+        mech = trim(mechArr[i])
+        if (mech != "") mechanics[mech]++
+    }
+
+    # Split Domains column (14) by comma
+    m = split($14, domainArr, ",")
+    for (j = 1; j <= m; j++) {
+        domain = trim(domainArr[j])
+        if (domain != "") domains[domain]++
+    }
+}
+
 END {
     for (m in mechanics) {
         if (mechanics[m] > max_mech_count) {
