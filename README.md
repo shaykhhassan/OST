@@ -90,7 +90,7 @@ END {
 
 Example output:
 
-```
+```bash
 /ID: 16
 Name: 0
 Year Published: 1
@@ -223,6 +223,7 @@ for (i = 1; i <= NF; i++) {
     printf "%s", $i
     if (i < NF) printf OFS
 }
+
 printf "\n"
 ```
 
@@ -231,8 +232,7 @@ printf "\n"
 ```bash
 ./preprocess sample.txt
 ```
-
-![image-20250519025226867](C:\Users\smha0\AppData\Roaming\Typora\typora-user-images\image-20250519025226867.png)
+![Screenshot 2025-05-19 025221](https://github.com/user-attachments/assets/5ce25fca-e22b-4983-ae1a-77e326ba7bb4)
 
 # Analysis - Script To Analyze Board Games
 
@@ -284,7 +284,7 @@ NR == 1 {
 
 This part of the script searched all rows. And splits the `Mechanics` and `Domains` fields by commas, trim spaces, and count total amount of each word in the column. It also make sures to only analyze fields with non-numeric values as `preprocess` replaces empty cells with '0' which might end up as the highest occurence.
 
-```
+```awk
 NR>1 {
   # Count mechanics (split by comma)
   if ($mechanics_idx != "") {
@@ -311,7 +311,7 @@ NR>1 {
 
 Store numeric values for year published, rating average, and complexity average to calculate correlations.
 
-```
+```awk
 # Store values for correlation if numeric and not empty
   year = $year_idx + 0
   rating = $rating_idx + 0
@@ -322,7 +322,7 @@ Store numeric values for year published, rating average, and complexity average 
 
 Identify the mechanic and domain with the highest frequency.
 
-```
+```awk
 END {
   # Find most popular mechanic
   max_mech_count = 0
@@ -355,7 +355,7 @@ $$
 r = \frac{n \sum (XY) - \sum X \sum Y}{\sqrt{[n \sum X^2 - (\sum X)^2][n \sum Y^2 - (\sum Y)^2]}}
 $$
 
-```
+```awk
 # Calculate Pearson correlations
   sum_x = sum_y = sum_x2 = sum_y2 = sum_xy = 0
 
@@ -399,9 +399,9 @@ $$
 
 Example output:
 
-``````
+```bash
 The most popular game mechanics is Hand Management found in 432 games
 The most popular game domain is Wargames found in 3029 games
 The correlation between the year of publication and the average rating is 0.136
 The correlation between the complexity of a game and its average rating is 0.511
-``````
+```
