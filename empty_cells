@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Script Authored By: Sh M Hassan Ali (23959698) UWA MIT
+# Assignment 2 - Open Source Tools and Scripting
+
 # This script given a text file version of a spreadsheet and the expected separator 
 # character, returns via standard output a list of the column titles 
 # (taken from the first line) and the number of empty cells found in that column.
