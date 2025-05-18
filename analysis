@@ -144,3 +144,8 @@ END {
   printf "The correlation between the complexity of a game and its average rating is %.3f\n", corr_complexity_rating
 }
 ' "$file"
+
+
+# Script Authored By: Sh M Hassan Ali (23959698) UWA MIT
+# Assignment 2 - Open Source Tools and Scripting
+
